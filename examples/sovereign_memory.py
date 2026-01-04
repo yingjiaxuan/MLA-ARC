@@ -7,17 +7,33 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from agentic_memory.memory_system import AgenticMemorySystem
 
 def main():
-    print("🧠 Initializing A-mem Sovereign System (Local)...")
-    
-    # Initialize with local backend
-    # Note: Requires Ollama running with 'llama3' pulled
+    # Load environment variables from .env if present (recommended for local development)
+    # This avoids requiring users to `source .env` manually.
+    try:
+        from dotenv import load_dotenv  # type: ignore
+        load_dotenv()
+    except Exception:
+        pass
+
+    print("🧠 Initializing A-mem Sovereign System...")
+
+    # Prefer OpenAI if OPENAI_API_KEY is set; otherwise fall back to Ollama
+    backend = os.getenv("LLM_BACKEND") or ("openai" if os.getenv("OPENAI_API_KEY") else "ollama")
+    llm_model = os.getenv("LLM_MODEL") or ("gpt-4o-mini" if backend == "openai" else "llama3")
+    api_key = os.getenv("OPENAI_API_KEY") if backend == "openai" else None
+
+    if backend == "openai" and not api_key:
+        print("❌ OPENAI_API_KEY not set. Export it and retry, or set LLM_BACKEND=ollama.")
+        return
+
     try:
         memory_system = AgenticMemorySystem(
             model_name='all-MiniLM-L6-v2',  # Local embeddings (via sentence-transformers)
-            llm_backend="ollama",
-            llm_model="llama3" 
+            llm_backend=backend,
+            llm_model=llm_model,
+            api_key=api_key
         )
-        print("✅ System initialized.")
+        print(f"✅ System initialized (backend={backend}, model={llm_model}).")
     except Exception as e:
         print(f"❌ Init failed: {e}")
         return
