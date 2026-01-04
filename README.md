@@ -11,7 +11,8 @@ Traditional Retrieval-Augmented Generation (RAG) systems typically adopt a stati
 
 MLA-ARC addresses these limitations by introducing a **three-tier memory architecture** (User Profile, Short-Term Memory, Long-Term Memory) and a **dynamic evolution mechanism** based on Prompt Engineering. This system allows the agent not just to store data, but to perform real-time correction, fusion, and active forgetting, creating a cognitive system with "metabolic" capabilities.
 
-![](1MemorySystemTop.png)
+![](Figure\1MemorySystemTop.png)
+
 Figure 1: Comparison between Traditional RAG Memory Systems and the MLA-ARC System
 
 ## 🎯 Key Challenges Solved
@@ -23,7 +24,9 @@ This project aims to resolve three core bottlenecks in building Long-Term LLM Ag
 ## 🏗️ System Architecture
 The core workflow of MLA-ARC consists of four phases: **Memory Construction** -> **Save & Select** -> **Memory Evolution** -> **Memory Retrieval**.
 
-![](3ThreeLayerDeleteStructure1.png)
+![](Figure\3ThreeLayerDeleteStructure1.png)
+
+
 Figure 2: Overview of the MLA-ARC System Workflow
 
 ### 1. Three-Layered Memory Structure
@@ -32,7 +35,9 @@ To simulate human memory models, the system discards flat indexing in favor of a
 * **User Profile (UP)**: The top layer acting as "metadata." It stores global, static, or semi-static user attributes (e.g., name, occupation, core constraints) extracted from dialogues to ensure persona consistency.
 * **Short-Term Memory (STM)**: Simulates "Working Memory." It uses a **Cache Queue** structure to retain the exact raw text of the most recent $K$ turns, ensuring the fluidity of the immediate conversation.
 * **Long-Term Memory (LTM)**: Built on **ChromaDB**. It stores historical experiences that have been summarized, de-noised, and structured into "Memory Nodes" for complex semantic retrieval.
-![](5Overall_Workflow.drawio%20.png)
+![](Figure\5Overall_Workflow.drawio%20.png)
+
+
 Figure 3: The Three-Layer Architecture: User Profile, STM, and LTM.
 
 ### 2\. Dynamic Memory Evolution
@@ -49,7 +54,8 @@ When the LTM storage or STM token count exceeds a preset threshold:
 1. **Identification**: The system selects the "coldest" memory fragments (lowest temperature).
 2. **Consolidation**: An LLM-driven Summary Prompt fuses these fragmented details into a high-density "Archived Node".
 3. **Eviction**: The original raw fragments are physically deleted, achieving lossy compression.
-![](6DeleteStructure2.drawio.png)
+![](Figure/6DeleteStructure2.drawio.png)
+
 Figure 4: The Memory Compression and Eviction Lifecycle
 
 ## 🛠️ Tech Stack
