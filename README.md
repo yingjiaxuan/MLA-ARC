@@ -1,6 +1,4 @@
-Here is the English version of the README.md file, tailored for your GitHub repository. It incorporates the content from your Master's thesis and places the images logically to explain the system architecture.
-
-## MLA-ARC: A Multi-Layered Agentic Memory ArchitectureIntegrating Dynamic Memory Evolution via Prompt Engineering
+# MLA-ARC: A Multi-Layered Agentic Memory ArchitectureIntegrating Dynamic Memory Evolution via Prompt Engineering
 2025 Master Thesis Project | Waseda University
 
 ## 📖 Introduction
