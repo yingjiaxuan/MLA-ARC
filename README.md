@@ -11,7 +11,7 @@ Traditional Retrieval-Augmented Generation (RAG) systems typically adopt a stati
 
 MLA-ARC addresses these limitations by introducing a **three-tier memory architecture** (User Profile, Short-Term Memory, Long-Term Memory) and a **dynamic evolution mechanism** based on Prompt Engineering. This system allows the agent not just to store data, but to perform real-time correction, fusion, and active forgetting, creating a cognitive system with "metabolic" capabilities.
 
-![](Figure\img1.png)
+![](./Figure/img1.png)
 
 Figure 1: Comparison between Traditional RAG Memory Systems and the MLA-ARC System
 
@@ -24,7 +24,7 @@ This project aims to resolve three core bottlenecks in building Long-Term LLM Ag
 ## 🏗️ System Architecture
 The core workflow of MLA-ARC consists of four phases: **Memory Construction** -> **Save & Select** -> **Memory Evolution** -> **Memory Retrieval**.
 
-![](Figure\img2.png)
+![](./Figure/img2.png)
 
 
 Figure 2: Overview of the MLA-ARC System Workflow
@@ -36,7 +36,7 @@ To simulate human memory models, the system discards flat indexing in favor of a
 * **Short-Term Memory (STM)**: Simulates "Working Memory." It uses a **Cache Queue** structure to retain the exact raw text of the most recent $K$ turns, ensuring the fluidity of the immediate conversation.
 * **Long-Term Memory (LTM)**: Built on **ChromaDB**. It stores historical experiences that have been summarized, de-noised, and structured into "Memory Nodes" for complex semantic retrieval.
 
-![](Figure\img3.png)
+![](./Figure/img3.png)
 
 Figure 3: The Three-Layer Architecture: User Profile, STM, and LTM.
 
@@ -55,7 +55,7 @@ When the LTM storage or STM token count exceeds a preset threshold:
 2. **Consolidation**: An LLM-driven Summary Prompt fuses these fragmented details into a high-density "Archived Node".
 3. **Eviction**: The original raw fragments are physically deleted, achieving lossy compression.
 
-![](Figure/img4.png)
+![](./Figure/img4.png)
 
 Figure 4: The Memory Compression and Eviction Lifecycle
 
