@@ -1,193 +1,88 @@
-# Agentic Memory 🧠
+Here is the English version of the README.md file, tailored for your GitHub repository. It incorporates the content from your Master's thesis and places the images logically to explain the system architecture.
 
-A novel agentic memory system for LLM agents that can dynamically organize memories in an agentic way.
+## MLA-ARC: A Multi-Layered Agentic Memory ArchitectureIntegrating Dynamic Memory Evolution via Prompt Engineering
+2025 Master Thesis Project | Waseda University
 
-## Introduction 🌟
+## 📖 Introduction
 
-Large Language Model (LLM) agents have demonstrated remarkable capabilities in handling complex real-world tasks through external tool usage. However, to effectively leverage historical experiences, they require sophisticated memory systems. Traditional memory systems, while providing basic storage and retrieval functionality, often lack advanced memory organization capabilities.
+**MLA-ARC** (Multi-Layered Agentic Architecture) is a novel **dynamic memory system for LLM Agents** inspired by human cognitive psychology.
 
-Our project introduces an innovative **Agentic Memory** system that revolutionizes how LLM agents manage and utilize their memories:
+Traditional Retrieval-Augmented Generation (RAG) systems typically adopt a static "Append-only" storage strategy. This approach often leads to "memory homogenization," retrieval noise interference, and unbounded storage expansion during long-term interactions.
 
-<div align="center">
-  <img src="Figure/intro-a.jpg" alt="Traditional Memory System" width="600"/>
-  <img src="Figure/intro-b.jpg" alt="Our Proposed Agentic Memory" width="600"/>
-  <br>
-  <em>Comparison between traditional memory system (top) and our proposed agentic memory (bottom). Our system enables dynamic memory operations and flexible agent-memory interactions.</em>
-</div>
+MLA-ARC addresses these limitations by introducing a **three-tier memory architecture** (User Profile, Short-Term Memory, Long-Term Memory) and a **dynamic evolution mechanism** based on Prompt Engineering. This system allows the agent not just to store data, but to perform real-time correction, fusion, and active forgetting, creating a cognitive system with "metabolic" capabilities.
 
-> **Note:** This repository provides a memory system to facilitate agent construction. If you want to reproduce the results presented in our paper, please refer to: [https://github.com/WujiangXu/AgenticMemory](https://github.com/WujiangXu/AgenticMemory)
+![](1MemorySystemTop.png)
+Figure 1: Comparison between Traditional RAG Memory Systems and the MLA-ARC System
 
-For more details, please refer to our paper: [A-MEM: Agentic Memory for LLM Agents](https://arxiv.org/pdf/2502.12110)
+## 🎯 Key Challenges Solved
+This project aims to resolve three core bottlenecks in building Long-Term LLM Agents:
+1. **Statelessness & Context Limitations**: Overcomes the "amnesia" of standard LLMs and the high cost/latency of extremely long context windows.
+2. **Static Nature vs. Dynamic Reality**: Solves the issue where traditional RAG cannot handle changing information (e.g., user preference shifts), preventing logical conflicts and hallucinations caused by outdated data.
+3. **Storage Bloat**: Introduces an "Active Forgetting" mechanism to automatically compress and prune low-value memories, maintaining high retrieval signal-to-noise ratio.
 
+## 🏗️ System Architecture
+The core workflow of MLA-ARC consists of four phases: **Memory Construction** -> **Save & Select** -> **Memory Evolution** -> **Memory Retrieval**.
 
-## Key Features ✨
+![](3ThreeLayerDeleteStructure1.png)
+Figure 2: Overview of the MLA-ARC System Workflow
 
-- 🔄 Dynamic memory organization based on Zettelkasten principles
-- 🔍 Intelligent indexing and linking of memories via ChromaDB
-- 📝 Comprehensive note generation with structured attributes
-- 🌐 Interconnected knowledge networks
-- 🧬 Continuous memory evolution and refinement
-- 🤖 Agent-driven decision making for adaptive memory management
+### 1. Three-Layered Memory Structure
+To simulate human memory models, the system discards flat indexing in favor of a hierarchical design:
 
-## Framework 🏗️
+* **User Profile (UP)**: The top layer acting as "metadata." It stores global, static, or semi-static user attributes (e.g., name, occupation, core constraints) extracted from dialogues to ensure persona consistency.
+* **Short-Term Memory (STM)**: Simulates "Working Memory." It uses a **Cache Queue** structure to retain the exact raw text of the most recent $K$ turns, ensuring the fluidity of the immediate conversation.
+* **Long-Term Memory (LTM)**: Built on **ChromaDB**. It stores historical experiences that have been summarized, de-noised, and structured into "Memory Nodes" for complex semantic retrieval.
+![](5Overall_Workflow.drawio%20.png)
+Figure 3: The Three-Layer Architecture: User Profile, STM, and LTM.
 
-<div align="center">
-  <img src="Figure/framework.jpg" alt="Agentic Memory Framework" width="800"/>
-  <br>
-  <em>The framework of our Agentic Memory system showing the dynamic interaction between LLM agents and memory components.</em>
-</div>
+### 2\. Dynamic Memory Evolution
+This is the core innovation of MLA-ARC. Instead of simply appending new data, the system uses **Prompt Chains** to interact with existing memories:
 
-## How It Works 🛠️
+* **Reinforcement**: If new information matches old memory, it increases the confidence or access count of the existing node.
+* **Correction & Update**: If new information conflicts with old facts (e.g., "I moved to Osaka"), the system updates or marks the old node as outdated to resolve conflicts.
+* **Link Generation**: Automatically identifies semantic connections between discrete memory nodes, creating a knowledge graph that supports **Multi-hop Reasoning**.
 
-When a new memory is added to the system:
-1. Generates comprehensive notes with structured attributes
-2. Creates contextual descriptions and tags
-3. Analyzes historical memories for relevant connections
-4. Establishes meaningful links based on similarities
-5. Enables dynamic memory evolution and updates
+### 3. Eviction & Consolidation Mechanism
+To prevent unbounded growth, the system implements a lifecycle management algorithm based on **Access Frequency** and **Time Decay**.
 
-## Results 📊
+When the LTM storage or STM token count exceeds a preset threshold:
+1. **Identification**: The system selects the "coldest" memory fragments (lowest temperature).
+2. **Consolidation**: An LLM-driven Summary Prompt fuses these fragmented details into a high-density "Archived Node".
+3. **Eviction**: The original raw fragments are physically deleted, achieving lossy compression.
+![](6DeleteStructure2.drawio.png)
+Figure 4: The Memory Compression and Eviction Lifecycle
 
-Empirical experiments conducted on six foundation models demonstrate superior performance compared to existing SOTA baselines.
+## 🛠️ Tech Stack
+* **Language**: Python 3.10+ 
+* **Agent Orchestration**: LangChain
+* **Vector Database**: ChromaDB (Vector + Metadata storage) 
+* **LLM Backbone**: Supports OpenAI (GPT-4o/mini) and Local Models (via Ollama/LiteLLM, e.g., Llama 3, Qwen) 
+* **Embedding**: sentence-transformers/all-MiniLM-L6-v2
 
-## Getting Started 🚀
-
-1. Clone the repository:
+## 🚀 Quick Start
+### Prerequisites
 ```bash
-git clone https://github.com/agiresearch/A-mem.git
-cd A-mem
+# Clone the repository
+git clone https://github.com/YourUsername/MLA-ARC.git
+cd MLA-ARC
+
+# Install dependencies
+pip install -r requirements.txt
+```
+### See README_QUICKSTART.md
+Then please read README_QUICKSTART.md, follow the guidance to do the smallest example.
+
+### Configuration
+Create a .env file in the root directory:
+```
+OPENAI_API_KEY=sk-xxxx
+# if use ChromaDB
+CHROMA_DB_PATH=./chroma_db
 ```
 
-2. Install dependencies:
-Create and activate a virtual environment (recommended):
-```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows, use: .venv\Scripts\activate
-```
+## 📊 Performance
+Evaluated on the **LoCoMo** (Long-term Context) and **DialSim** (Social Simulation) datasets, MLA-ARC demonstrated significant improvements over baselines like MemoryBank, ReadAgent, and MemGPT:
 
-Install the package:
-```bash
-pip install .
-```
-For development, you can install it in editable mode:
-```bash
-pip install -e .
-```
-
-3. Usage Examples 💡
-
-Here's how to use the Agentic Memory system for basic operations:
-
-```python
-from agentic_memory.memory_system import AgenticMemorySystem
-
-# Initialize the memory system 🚀
-memory_system = AgenticMemorySystem(
-    model_name='all-MiniLM-L6-v2',  # Embedding model for ChromaDB
-    llm_backend="openai",           # LLM backend (openai/ollama)
-    llm_model="gpt-4o-mini"         # LLM model name
-)
-
-# Add Memories ➕
-# Simple addition
-memory_id = memory_system.add_note("Deep learning neural networks")
-
-# Addition with metadata
-memory_id = memory_system.add_note(
-    content="Machine learning project notes",
-    tags=["ml", "project"],
-    category="Research",
-    timestamp="202503021500"  # YYYYMMDDHHmm format
-)
-
-# Read (Retrieve) Memories 📖
-# Get memory by ID
-memory = memory_system.read(memory_id)
-print(f"Content: {memory.content}")
-print(f"Tags: {memory.tags}")
-print(f"Context: {memory.context}")
-print(f"Keywords: {memory.keywords}")
-
-# Search memories
-results = memory_system.search_agentic("neural networks", k=5)
-for result in results:
-    print(f"ID: {result['id']}")
-    print(f"Content: {result['content']}")
-    print(f"Tags: {result['tags']}")
-    print("---")
-
-# Update Memories 🔄
-memory_system.update(memory_id, content="Updated content about deep learning")
-
-# Delete Memories ❌
-memory_system.delete(memory_id)
-
-# Memory Evolution 🧬
-# The system automatically evolves memories by:
-# 1. Finding semantic relationships using ChromaDB
-# 2. Updating metadata and context
-# 3. Creating connections between related memories
-# This happens automatically when adding or updating memories!
-```
-
-### Advanced Features 🌟
-
-1. **ChromaDB Vector Storage** 📦
-   - Efficient vector embedding storage and retrieval
-   - Fast semantic similarity search
-   - Automatic metadata handling
-   - Persistent memory storage
-
-2. **Memory Evolution** 🧬
-   - Automatically analyzes content relationships
-   - Updates tags and context based on related memories
-   - Creates semantic connections between memories
-
-3. **Flexible Metadata** 📋
-   - Custom tags and categories
-   - Automatic keyword extraction
-   - Context generation
-   - Timestamp tracking
-
-4. **Multiple LLM Backends** 🤖
-   - OpenAI (GPT-4, GPT-3.5)
-   - Ollama (for local deployment)
-
-### Best Practices 💪
-
-1. **Memory Creation** ✨:
-   - Provide clear, specific content
-   - Add relevant tags for better organization
-   - Let the system handle context and keyword generation
-
-2. **Memory Retrieval** 🔍:
-   - Use specific search queries
-   - Adjust 'k' parameter based on needed results
-   - Consider both exact and semantic matches
-
-3. **Memory Evolution** 🧬:
-   - Allow automatic evolution to organize memories
-   - Review generated connections periodically
-   - Use consistent tagging conventions
-
-4. **Error Handling** ⚠️:
-   - Always check return values
-   - Handle potential KeyError for non-existent memories
-   - Use try-except blocks for LLM operations
-
-## Citation 📚
-
-If you use this code in your research, please cite our work:
-
-```bibtex
-@article{xu2025mem,
-  title={A-mem: Agentic memory for llm agents},
-  author={Xu, Wujiang and Liang, Zujie and Mei, Kai and Gao, Hang and Tan, Juntao and Zhang, Yongfeng},
-  journal={arXiv preprint arXiv:2502.12110},
-  year={2025}
-}
-```
-
-## License 📄
-
-This project is licensed under the MIT License. See LICENSE for details.
+* **Multi-hop Reasoning**: F1 Score improved by approximately **100-200%** compared to baselines on complex dependency tasks.
+* **Storage Efficiency**: Token consumption reduced by **85-93%** through the structured indexing and compression mechanisms.
+* **Scalability**: Maintained low latency retrieval (~3.7ms) even with a memory scale of 1,000,000 nodes.
